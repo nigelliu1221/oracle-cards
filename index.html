@@ -947,3 +947,234 @@
                 keywords: ["穩定", "底氣", "能量", "穿透力"],
                 image: "60-boar.png"
             }
+  };
+        
+        // 初始化快速選擇按鈕
+        function initQuickSelect() {
+            const grid = document.getElementById('numberGrid');
+            for (let i = 1; i <= 60; i++) {
+                const btn = document.createElement('button');
+                btn.className = 'number-btn';
+                btn.textContent = i;
+                btn.onclick = () => {
+                    document.getElementById('cardNumber').value = i;
+                    showCard();
+                };
+                grid.appendChild(btn);
+            }
+        }
+        
+        // 顯示卡片
+        function showCard() {
+            const cardNum = parseInt(document.getElementById('cardNumber').value);
+            
+            if (!cardNum || cardNum < 1 || cardNum > 60) {
+                alert('請輸入 1-60 之間的數字');
+                return;
+            }
+            
+            // 顯示載入動畫
+            document.getElementById('searchSection').style.display = 'none';
+            document.getElementById('loadingSection').style.display = 'block';
+            
+            // 模擬載入時間（實際使用時可能需要載入圖片）
+            setTimeout(() => {
+                displayCardResult(cardNum);
+            }, 500);
+        }
+        
+        // 顯示結果
+        function displayCardResult(cardNum) {
+            const card = cardDatabase[cardNum];
+            
+            if (!card) {
+                alert('找不到該卡片資料');
+                document.getElementById('loadingSection').style.display = 'none';
+                document.getElementById('searchSection').style.display = 'block';
+                return;
+            }
+            
+            // 設定卡片編號
+            document.getElementById('displayCardNumber').textContent = `#${cardNum}`;
+            
+            // 設定圖片
+            const img = document.getElementById('cardImage');
+            img.src = IMAGE_BASE_URL + card.image;
+            img.onerror = () => {
+                // 圖片載入失敗時顯示預設圖
+                img.style.display = 'none';
+                img.parentElement.innerHTML = `<div style="font-size: 120px; margin: 40px 0;">🎴</div>`;
+            };
+            
+            // 設定文字內容
+            document.getElementById('cardTitle').textContent = card.title;
+            document.getElementById('reminderText').textContent = card.reminder;
+            document.getElementById('meaningText').textContent = card.meaning;
+            document.getElementById('practiceText').textContent = card.practice;
+            
+            // 設定關鍵詞
+            if (card.keywords) {
+                const keywordsHTML = card.keywords.map(keyword => 
+                    `<span class="keyword-tag">${keyword}</span>`
+                ).join('');
+                document.getElementById('keywordsSection').innerHTML = keywordsHTML;
+            }
+            
+            // 切換顯示
+            document.getElementById('loadingSection').style.display = 'none';
+            document.getElementById('resultSection').style.display = 'block';
+            
+            // 捲動到頂部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        // 新查詢
+        function newSearch() {
+            document.getElementById('cardNumber').value = '';
+            document.getElementById('resultSection').style.display = 'none';
+            document.getElementById('searchSection').style.display = 'block';
+            document.getElementById('cardNumber').focus();
+        }
+        
+        // Enter 鍵送出
+        document.getElementById('cardNumber').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                showCard();
+            }
+        });
+        
+        // URL 參數支援（可以直接連結到特定卡片）
+        function checkURLParams() {
+            const params = new URLSearchParams(window.location.search);
+            const cardNum = params.get('card');
+            if (cardNum) {
+                document.getElementById('cardNumber').value = cardNum;
+                showCard();
+            }
+        }
+        
+        // 初始化
+        window.addEventListener('DOMContentLoaded', () => {
+            initQuickSelect();
+            checkURLParams();
+            
+            // 自動聚焦輸入框
+            document.getElementById('cardNumber').focus();
+        });
+    </script>
+</body>
+</html>6: {
+                title: "鯨魚｜行動突破",
+                reminder: "穩住當下，比衝出去更能走得遠。",
+                meaning: "行動前的躊躇不安，往往源自未整理的焦慮。唯有放慢節奏，重新檢視當前的狀態與需求，才能將那些混亂的情緒轉化為前行的火焰。當你不再匆促，就會發現內在早已準備好踏出那一步。",
+                practice: "選擇一件你最近猶豫的任務，寫下你最擔心的結果，並寫下「如果發生了，我會怎麼做」。",
+                keywords: ["穩定", "節奏", "焦慮", "準備"],
+                image: "06-whale.png"
+            },
+            7: {
+                title: "大象｜內在穩定",
+                reminder: "慢下來，才看得見清晰的風景。",
+                meaning: "心煩意亂時，不妨讓自己慢一點。放下「馬上要解決」的焦慮，允許自己暫觀當下變化。你會發現，當節奏緩下來，原本模糊的方向，也會漸漸浮現眼前。",
+                practice: "今天用比平常更慢的速度吃飯或走路，觀察內心是否也隨之放鬆。",
+                keywords: ["慢下來", "清晰", "節奏", "方向"],
+                image: "07-elephant.png"
+            },
+            8: {
+                title: "鯨魚｜接納流動",
+                reminder: "不是每件事都要掌控，順流反而更穩。",
+                meaning: "你或許正緊抓某個計畫、期待或節奏，但內在其實早已感到疲憊。放手不是放棄，而是相信事情會以適合的形式展開。當你學會信任節奏，將發現更流暢的可能。",
+                practice: "今天觀察一件你「很想掌握」的事，試著鬆手一點，讓它自然發展。",
+                keywords: ["放手", "信任", "節奏", "流暢"],
+                image: "08-whale2.png"
+            },
+            9: {
+                title: "浣熊｜自信成長",
+                reminder: "累積一步步，終將帶你飛躍。",
+                meaning: "過去的努力與經驗，是你通向更高處的基石。當你學會回顧自己的歷程，就會看見自己走得很遠。穩定地前進，讓眼界持續擴張，終能踏上更寬闊的方向。",
+                practice: "記錄你近半年完成的一件成果，寫下它帶來的幫助與變化。",
+                keywords: ["累積", "經驗", "眼界", "前進"],
+                image: "09-raccoon.png"
+            },
+            10: {
+                title: "鶴｜關愛共鳴",
+                reminder: "牽掛若成束縛，就該重新定義愛的模樣。",
+                meaning: "任何關係中若讓你感到失去自由，或總在壓抑自己以配合對方，那應是時候看看這樣的付出是否值得。你可以溫柔對待他人，同時，也不忘為自己留一片自由呼吸的空間。",
+                practice: "問問自己：「我是否在這段關係中，自在做自己？」",
+                keywords: ["牽掛", "束縛", "自由", "空間"],
+                image: "10-crane2.png"
+            },
+            11: {
+                title: "樹懶｜轉化覺醒",
+                reminder: "慢一點，才聽得到內在的聲音。",
+                meaning: "當你感覺遲疑、迷茫，並不代表你停滯了。有些階段正是生命邀請你進入更深的照見層次。放下對「立刻知道該做什麼」的執念，你的直覺會以最柔和的方式指引你，察覺潛藏在當下的訊號。",
+                practice: "今天選擇一件原本想「趕快搞定」的事，刻意放「慢流程」，觀察過程中新的感受或靈感浮現。",
+                keywords: ["慢", "直覺", "照見", "訊號"],
+                image: "11-sloth.png"
+            },
+            12: {
+                title: "蝴蝶｜行動突破",
+                reminder: "看懂時機，行動才能有力。",
+                meaning: "起飛前，蝴蝶總是審慎感受風向。理解整體局勢與時機，是順利前行的關鍵。你不需要一步到位，而是需要一次精準的出擊。別讓猶豫拖住腳，也別讓衝動模糊眼光。",
+                practice: "列出今天最想解決的一件事，選一個具體行動並設定限時 30 分鐘完成。",
+                keywords: ["時機", "精準", "局勢", "出擊"],
+                image: "12-butterfly.png"
+            },
+            13: {
+                title: "浣熊｜內在穩定",
+                reminder: "停一停，讓情緒有個出口。",
+                meaning: "情緒不是敵人，而是訊號。當你願意看見、接納它的來訪，情緒會逐漸被安撫，內在也會更穩定清晰。真正的內靜，不是壓抑，而是願意溫柔地面對與覺察感受。",
+                practice: "靜坐一分鐘，覺察自己此刻的情緒，並對自己說：「我可以有這樣的情緒。」",
+                keywords: ["情緒", "接納", "覺察", "內靜"],
+                image: "13-raccoon2.png"
+            },
+            14: {
+                title: "樹蛙｜接納流動",
+                reminder: "最真實的路徑，藏在當下的細節裡。",
+                meaning: "當思緒漂浮不定，你可能錯過眼前其實早已浮現的方向與資源。你的心越能停留當下，就越能從中接收清晰的訊息。紛擾來自過去與未來，寧靜來自當下。",
+                practice: "選一個生活片刻（如吃飯、走路），用全部感官去體會它，不評論，只觀察。",
+                keywords: ["當下", "細節", "訊息", "寧靜"],
+                image: "14-treefrog.png"
+            },
+            15: {
+                title: "鹿｜自信成長",
+                reminder: "每個努力的時刻，都是幫你發光。",
+                meaning: "別小看你所能。努力耕耘時光，最終會在某個時刻綻放光芒。當試著突破原有限制，在行動中學習，讓你的成長之路持續拓寬。相信自己所做的每一件事，都是實力的累積與擴張。",
+                practice: "寫下你今天完成的一件小事，肯定它對你造成的正向影響，再寫出下一步你可以做的行動。",
+                keywords: ["努力", "光芒", "突破", "實力"],
+                image: "15-deer2.png"
+            },
+            16: {
+                title: "兔子｜關愛共鳴",
+                reminder: "安靜地聽自己，才能知道關係的方向。",
+                meaning: "當你感到不確定，與其向外尋找答案，不如回頭傾聽自己內心的聲音。你真正渴望的愛是支持還是距離？關係的持續需要雙方的節奏相合，而那份安靜會在你誠實面對心意時浮現。",
+                practice: "今天留意與他人互動時，你是舒服地做自己，還是在壓抑或迴避？",
+                keywords: ["傾聽", "內心", "節奏", "誠實"],
+                image: "16-rabbit2.png"
+            },
+            17: {
+                title: "刺蝟｜轉化覺醒",
+                reminder: "你所尋的力量，從來不在別人身上。",
+                meaning: "也許你習慣了保護自己、不輕易顯露真實感受。但當你慢慢開始信任自己的直覺與價值，那些被壓抑的力量將有機會顯露。你的潛能其實一直都在，只是需要一個契機喚醒它。",
+                practice: "今天挑選一個你擅長卻常忽略的能力，為它安排一次小小的發揮空間。",
+                keywords: ["力量", "信任", "潛能", "顯露"],
+                image: "17-hedgehog2.png"
+            },
+            18: {
+                title: "猴子｜行動突破",
+                reminder: "真正的解法，藏在冷靜背後。",
+                meaning: "當情緒高漲或困境來襲，第一反應常是逃避或衝撞，但這往往無助於真正跨越。冷靜地看清問題核心，才能辨明方向並減少耗損。穩定情緒，是建立行動力的基礎。",
+                practice: "在決定一件事前，思考「我此刻的感受是什麼？我希望得到的結果是什麼？」",
+                keywords: ["冷靜", "核心", "方向", "穩定"],
+                image: "18-monkey.png"
+            },
+            19: {
+                title: "信天翁｜內在穩定",
+                reminder: "你不需要做到每一件事都完美。",
+                meaning: "追求完美容易讓內在長期處於緊繃狀態。允許自己適度鬆懈，是一種成熟的選擇。當你給自己空間喘息，才能在柔軟中表出穩定與清明，也讓心變得更有彈性。",
+                practice: "今天選一件事用「剛剛好」完成，不必事事滿分，依然值得肯定。",
+                keywords: ["完美", "鬆懈", "彈性", "清明"],
+                image: "19-albatross.png"
+            },
+            20: {
+                title: "大象｜接納流動",
+                reminder:
