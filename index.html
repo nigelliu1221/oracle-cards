@@ -1,4 +1,606 @@
-practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位置，輕輕呼氣。",
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解答之卡 - 線上查詢</title>
+    <meta name="description" content="解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
+    <meta property="og:title" content="解答之卡">
+    <meta property="og:description" content="輸入卡片編號，查看完整的心靈指引">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        /* 首頁查詢 */
+        .search-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+        
+        .input-group {
+            margin-bottom: 30px;
+        }
+        
+        .card-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            border: 3px solid #e0e0e0;
+            border-radius: 15px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .card-input:focus {
+            outline: none;
+            border-color: #667eea;
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+        }
+        
+        .card-input::placeholder {
+            color: #bdc3c7;
+            font-weight: 400;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        /* 快速選擇 */
+        .quick-select {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #ecf0f1;
+        }
+        
+        .quick-select h3 {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .number-grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 8px;
+        }
+        
+        .number-btn {
+            padding: 10px;
+            border: 1px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 14px;
+            color: #667eea;
+        }
+        
+        .number-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        /* 結果顯示 */
+        .result-container {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 卡片圖片 */
+        .card-image-section {
+            position: relative;
+            background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
+            padding: 40px 20px;
+            text-align: center;
+        }
+        
+        .card-number {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: #667eea;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card-image {
+            max-width: 320px;
+            max-height: 320px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
+            animation: floatIn 0.8s ease-out;
+        }
+        
+        @keyframes floatIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        /* 卡片內容 */
+        .card-content {
+            padding: 40px 30px;
+        }
+        
+        .card-title {
+            font-size: 32px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 700;
+        }
+        
+        .content-section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            font-size: 18px;
+            color: #667eea;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .section-icon {
+            margin-right: 10px;
+            font-size: 24px;
+        }
+        
+        .reminder-box {
+            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+            padding: 20px 25px;
+            border-radius: 15px;
+            font-size: 18px;
+            color: #5a6c8c;
+            font-style: italic;
+            line-height: 1.6;
+            border-left: 4px solid #667eea;
+        }
+        
+        .meaning-text {
+            line-height: 1.8;
+            color: #4a5568;
+            font-size: 16px;
+        }
+        
+        .practice-box {
+            background: linear-gradient(135deg, #fff9f0 0%, #fff5e6 100%);
+            padding: 20px 25px;
+            border-radius: 15px;
+            line-height: 1.6;
+            color: #6b5b3a;
+            border-left: 4px solid #ffa500;
+        }
+        
+        /* 關鍵詞 */
+        .keywords-section {
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #e8f0ff;
+            color: #667eea;
+            border-radius: 20px;
+            margin: 5px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* 底部按鈕 */
+        .action-buttons {
+            padding: 30px;
+            background: #f8f9fc;
+            text-align: center;
+        }
+        
+        .new-search-btn {
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .new-search-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 600px) {
+            .search-card {
+                padding: 30px 20px;
+            }
+            
+            .card-title {
+                font-size: 26px;
+            }
+            
+            .number-grid {
+                grid-template-columns: repeat(6, 1fr);
+            }
+            
+            .card-image {
+                max-width: 280px;
+                max-height: 280px;
+            }
+        }
+        
+        /* 載入動畫 */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(102, 126, 234, 0.3);
+            border-radius: 50%;
+            border-top-color: #667eea;
+            animation: spin 1s ease-in-out infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 查詢介面 -->
+        <div class="search-card" id="searchSection">
+            <div class="logo">🎴</div>
+            <h1>解答之卡</h1>
+            <p class="subtitle">輸入卡片編號，查看完整解讀</p>
+            
+            <div class="input-group">
+                <input type="number" 
+                       class="card-input" 
+                       id="cardNumber" 
+                       placeholder="1-60"
+                       min="1" 
+                       max="60"
+                       autofocus>
+            </div>
+            
+            <button class="submit-btn" onclick="showCard()">查看卡片解讀</button>
+            
+            <!-- 快速選擇（選用） -->
+            <div class="quick-select">
+                <h3>快速選擇</h3>
+                <div class="number-grid" id="numberGrid"></div>
+            </div>
+        </div>
+        
+        <!-- 載入中 -->
+        <div class="loading" id="loadingSection">
+            <div class="loading-spinner"></div>
+            <p>正在載入卡片...</p>
+        </div>
+        
+        <!-- 結果顯示 -->
+        <div class="result-container" id="resultSection">
+            <div class="result-card">
+                <!-- 圖片區 -->
+                <div class="card-image-section">
+                    <div class="card-number" id="displayCardNumber"></div>
+                    <img id="cardImage" class="card-image" alt="卡片圖像">
+                </div>
+                
+                <!-- 內容區 -->
+                <div class="card-content">
+                    <h2 class="card-title" id="cardTitle"></h2>
+                    
+                    <div class="content-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">✦</span>
+                            正念提醒
+                        </h3>
+                        <div class="reminder-box" id="reminderText"></div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">📖</span>
+                            牌卡解讀
+                        </h3>
+                        <p class="meaning-text" id="meaningText"></p>
+                    </div>
+                    
+                    <div class="content-section">
+                        <h3 class="section-title">
+                            <span class="section-icon">✨</span>
+                            正念練習
+                        </h3>
+                        <div class="practice-box" id="practiceText"></div>
+                    </div>
+                    
+                    <div class="keywords-section" id="keywordsSection"></div>
+                </div>
+                
+                <!-- 返回按鈕 -->
+                <div class="action-buttons">
+                    <button class="new-search-btn" onclick="newSearch()">查詢其他卡片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // GitHub 設定 - 請更新成你的資訊
+        const GITHUB_USERNAME = 'nigel-id';  // 你的 GitHub 用戶名
+        const GITHUB_REPO = 'oracle-cards';  // 你的倉庫名稱
+        const IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/images/`;
+           
+        // 卡片資料庫
+        const cardDatabase = {
+            1: {
+                title: "鶴｜內在穩定",
+                reminder: "放鬆一點，才聽得到內在的聲音。",
+                meaning: "焦慮來時，別急著排斥它的存在。當你選擇順應情緒、暫停評斷，節奏自然會放鬆，內心也會變得更清楚。你不需立即知道答案，只需先與此刻和平共處，平靜就會慢慢回來。",
+                practice: "當感到不安，閉眼深呼吸三次，把注意力放回呼吸與身體感受。",
+                keywords: ["放鬆", "內在聲音", "平靜", "和平共處"],
+                image: "01-crane.png"
+            },
+            2: {
+                title: "兔子｜接納流動",
+                reminder: "差異不是威脅，而是轉化的起點。",
+                meaning: "你可能面對內外拉扯、矛盾的想法或意見分歧。無論是與人相處還是自我掙扎，都不需急著統一觀點。當你學會同時容納多種可能性，內心的柔軟與智慧將隨之展現。",
+                practice: "列出當前兩種矛盾的聲音，試著站在第三個角度來理解它們的存在理由。",
+                keywords: ["差異", "轉化", "容納", "柔軟"],
+                image: "02-rabbit.png"
+            },
+            3: {
+                title: "狐狸｜自信成長",
+                reminder: "相信自己，你能做得更好。",
+                meaning: "你擁有更多的潛力，只需跨出第一步，就能看見新的可能性。面對挑戰，不必退縮。踏出舒適圈後，你將發現原來的自己其實早已準備好迎接下一段旅程。",
+                practice: "挑選一件想嘗試卻猶豫的事，今天進行一小步行動，觀察變化感受。",
+                keywords: ["潛力", "挑戰", "舒適圈", "可能性"],
+                image: "03-fox.png"
+            },
+            4: {
+                title: "刺蝟｜關愛共鳴",
+                reminder: "靠得太近會刺痛，留點空間才能更親密。",
+                meaning: "真正長久的關係，從來不是緊密無間的依附，而是建立在適當距離與深刻尊重之上的平衡。你不需要時時黏在一起，反而應保有彼此呼吸與成長的空間。這不是疏離，而是一種更成熟的靠近。",
+                practice: "今天刻意給彼此一段獨處時間，觀察這段留白是否讓關係更自在。",
+                keywords: ["距離", "尊重", "平衡", "成熟"],
+                image: "04-hedgehog.png"
+            },
+            5: {
+                title: "鹿｜轉化覺醒",
+                reminder: "不需急著成熟，你的蛻變自有節奏。",
+                meaning: "當你正在成長的轉角，蛻變也許帶著不確定與不安。其實變化本身就是學習的一環。不必催促自己走得快，每個調整都是向內靠近的過程。只要你願意持續前進，力量自然會逐漸顯現。",
+                practice: "今天為自己設定一件「還不熟練，但願意嘗試」的小任務，記錄你從中發現了什麼。",
+                keywords: ["蛻變", "成長", "節奏", "力量"],
+                image: "05-deer.png"
+            },
+            6: {
+                title: "鯨魚｜行動突破",
+                reminder: "穩住當下，比衝出去更能走得遠。",
+                meaning: "行動前的躊躇不安，往往源自未整理的焦慮。唯有放慢節奏，重新檢視當前的狀態與需求，才能將那些混亂的情緒轉化為前行的火焰。當你不再匆促，就會發現內在早已準備好踏出那一步。",
+                practice: "選擇一件你最近猶豫的任務，寫下你最擔心的結果，並寫下「如果發生了，我會怎麼做」。",
+                keywords: ["穩定", "節奏", "焦慮", "準備"],
+                image: "06-whale.png"
+            },
+            7: {
+                title: "大象｜內在穩定",
+                reminder: "慢下來，才看得見清晰的風景。",
+                meaning: "心煩意亂時，不妨讓自己慢一點。放下「馬上要解決」的焦慮，允許自己暫觀當下變化。你會發現，當節奏緩下來，原本模糊的方向，也會漸漸浮現眼前。",
+                practice: "今天用比平常更慢的速度吃飯或走路，觀察內心是否也隨之放鬆。",
+                keywords: ["慢下來", "清晰", "節奏", "方向"],
+                image: "07-elephant.png"
+            },
+            8: {
+                title: "鯨魚｜接納流動",
+                reminder: "不是每件事都要掌控，順流反而更穩。",
+                meaning: "你或許正緊抓某個計畫、期待或節奏，但內在其實早已感到疲憊。放手不是放棄，而是相信事情會以適合的形式展開。當你學會信任節奏，將發現更流暢的可能。",
+                practice: "今天觀察一件你「很想掌握」的事，試著鬆手一點，讓它自然發展。",
+                keywords: ["放手", "信任", "節奏", "流暢"],
+                image: "08-whale2.png"
+            },
+            9: {
+                title: "浣熊｜自信成長",
+                reminder: "累積一步步，終將帶你飛躍。",
+                meaning: "過去的努力與經驗，是你通向更高處的基石。當你學會回顧自己的歷程，就會看見自己走得很遠。穩定地前進，讓眼界持續擴張，終能踏上更寬闊的方向。",
+                practice: "記錄你近半年完成的一件成果，寫下它帶來的幫助與變化。",
+                keywords: ["累積", "經驗", "眼界", "前進"],
+                image: "09-raccoon.png"
+            },
+            10: {
+                title: "鶴｜關愛共鳴",
+                reminder: "牽掛若成束縛，就該重新定義愛的模樣。",
+                meaning: "任何關係中若讓你感到失去自由，或總在壓抑自己以配合對方，那應是時候看看這樣的付出是否值得。你可以溫柔對待他人，同時，也不忘為自己留一片自由呼吸的空間。",
+                practice: "問問自己：「我是否在這段關係中，自在做自己？」",
+                keywords: ["牽掛", "束縛", "自由", "空間"],
+                image: "10-crane2.png"
+            },
+            11: {
+                title: "樹懶｜轉化覺醒",
+                reminder: "慢一點，才聽得到內在的聲音。",
+                meaning: "當你感覺遲疑、迷茫，並不代表你停滯了。有些階段正是生命邀請你進入更深的照見層次。放下對「立刻知道該做什麼」的執念，你的直覺會以最柔和的方式指引你，察覺潛藏在當下的訊號。",
+                practice: "今天選擇一件原本想「趕快搞定」的事，刻意放「慢流程」，觀察過程中新的感受或靈感浮現。",
+                keywords: ["慢", "直覺", "照見", "訊號"],
+                image: "11-sloth.png"
+            },
+            12: {
+                title: "蝴蝶｜行動突破",
+                reminder: "看懂時機，行動才能有力。",
+                meaning: "起飛前，蝴蝶總是審慎感受風向。理解整體局勢與時機，是順利前行的關鍵。你不需要一步到位，而是需要一次精準的出擊。別讓猶豫拖住腳，也別讓衝動模糊眼光。",
+                practice: "列出今天最想解決的一件事，選一個具體行動並設定限時 30 分鐘完成。",
+                keywords: ["時機", "精準", "局勢", "出擊"],
+                image: "12-butterfly.png"
+            },
+            13: {
+                title: "浣熊｜內在穩定",
+                reminder: "停一停，讓情緒有個出口。",
+                meaning: "情緒不是敵人，而是訊號。當你願意看見、接納它的來訪，情緒會逐漸被安撫，內在也會更穩定清晰。真正的內靜，不是壓抑，而是願意溫柔地面對與覺察感受。",
+                practice: "靜坐一分鐘，覺察自己此刻的情緒，並對自己說：「我可以有這樣的情緒。」",
+                keywords: ["情緒", "接納", "覺察", "內靜"],
+                image: "13-raccoon2.png"
+            },
+            14: {
+                title: "樹蛙｜接納流動",
+                reminder: "最真實的路徑，藏在當下的細節裡。",
+                meaning: "當思緒漂浮不定，你可能錯過眼前其實早已浮現的方向與資源。你的心越能停留當下，就越能從中接收清晰的訊息。紛擾來自過去與未來，寧靜來自當下。",
+                practice: "選一個生活片刻（如吃飯、走路），用全部感官去體會它，不評論，只觀察。",
+                keywords: ["當下", "細節", "訊息", "寧靜"],
+                image: "14-treefrog.png"
+            },
+            15: {
+                title: "鹿｜自信成長",
+                reminder: "每個努力的時刻，都是幫你發光。",
+                meaning: "別小看你所能。努力耕耘時光，最終會在某個時刻綻放光芒。當試著突破原有限制，在行動中學習，讓你的成長之路持續拓寬。相信自己所做的每一件事，都是實力的累積與擴張。",
+                practice: "寫下你今天完成的一件小事，肯定它對你造成的正向影響，再寫出下一步你可以做的行動。",
+                keywords: ["努力", "光芒", "突破", "實力"],
+                image: "15-deer2.png"
+            },
+            16: {
+                title: "兔子｜關愛共鳴",
+                reminder: "安靜地聽自己，才能知道關係的方向。",
+                meaning: "當你感到不確定，與其向外尋找答案，不如回頭傾聽自己內心的聲音。你真正渴望的愛是支持還是距離？關係的持續需要雙方的節奏相合，而那份安靜會在你誠實面對心意時浮現。",
+                practice: "今天留意與他人互動時，你是舒服地做自己，還是在壓抑或迴避？",
+                keywords: ["傾聽", "內心", "節奏", "誠實"],
+                image: "16-rabbit2.png"
+            },
+            17: {
+                title: "刺蝟｜轉化覺醒",
+                reminder: "你所尋的力量，從來不在別人身上。",
+                meaning: "也許你習慣了保護自己、不輕易顯露真實感受。但當你慢慢開始信任自己的直覺與價值，那些被壓抑的力量將有機會顯露。你的潛能其實一直都在，只是需要一個契機喚醒它。",
+                practice: "今天挑選一個你擅長卻常忽略的能力，為它安排一次小小的發揮空間。",
+                keywords: ["力量", "信任", "潛能", "顯露"],
+                image: "17-hedgehog2.png"
+            },
+            18: {
+                title: "猴子｜行動突破",
+                reminder: "真正的解法，藏在冷靜背後。",
+                meaning: "當情緒高漲或困境來襲，第一反應常是逃避或衝撞，但這往往無助於真正跨越。冷靜地看清問題核心，才能辨明方向並減少耗損。穩定情緒，是建立行動力的基礎。",
+                practice: "在決定一件事前，思考「我此刻的感受是什麼？我希望得到的結果是什麼？」",
+                keywords: ["冷靜", "核心", "方向", "穩定"],
+                image: "18-monkey.png"
+            },
+            19: {
+                title: "信天翁｜內在穩定",
+                reminder: "你不需要做到每一件事都完美。",
+                meaning: "追求完美容易讓內在長期處於緊繃狀態。允許自己適度鬆懈，是一種成熟的選擇。當你給自己空間喘息，才能在柔軟中表出穩定與清明，也讓心變得更有彈性。",
+                practice: "今天選一件事用「剛剛好」完成，不必事事滿分，依然值得肯定。",
+                keywords: ["完美", "鬆懈", "彈性", "清明"],
+                image: "19-albatross.png"
+            },
+            20: {
+                title: "大象｜接納流動",
+                reminder: "不急著平靜，起伏也是一種節奏。",
+                meaning: "你可能正處於狀態波動的階段，情緒、進度、人際互動都起伏不定。這張牌鼓勵你先暫停對抗，試著面對不完美其實。每一次不適的感受，其實都是生活對你的提醒，而非責備。",
+                practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位 practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位置，輕輕呼氣。",
                 keywords: ["起伏", "節奏", "接納", "提醒"],
                 image: "20-elephant2.png"
             },
@@ -322,706 +924,3 @@ practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位置，
                 keywords: ["穩定", "底氣", "能量", "穿透力"],
                 image: "60-boar.png"
             }
-        };
-        
-        // 初始化快速選擇按鈕
-        function initQuickSelect() {
-            const grid = document.getElementById('numberGrid');
-            for (let i = 1; i <= 60; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'number-btn';
-                btn.textContent = i;
-                btn.onclick = () => {
-                    document.getElementById('cardNumber').value = i;
-                    showCard();
-                };
-                grid.appendChild(btn);
-            }
-        }
-        
-        // 顯示卡片
-        function showCard() {
-            const cardNum = parseInt(document.getElementById('cardNumber').value);
-            
-            if (!cardNum || cardNum < 1 || cardNum > 60) {
-                alert('請輸入 1-60 之間的數字');
-                return;
-            }
-            
-            // 顯示載入動畫
-            document.getElementById('searchSection').style.display = 'none';
-            document.getElementById('loadingSection').style.display = 'block';
-            
-            // 模擬載入時間（實際使用時可能需要載入圖片）
-            setTimeout(() => {
-                displayCardResult(cardNum);
-            }, 500);
-        }
-        
-        // 顯示結果
-        function displayCardResult(cardNum) {
-            const card = cardDatabase[cardNum];
-            
-            if (!card) {
-                alert('找不到該卡片資料');
-                document.getElementById('loadingSection').style.display = 'none';
-                document.getElementById('searchSection').style.display = 'block';
-                return;
-            }
-            
-            // 設定卡片編號
-            document.getElementById('displayCardNumber').textContent = `#${cardNum}`;
-            
-            // 設定圖片
-            const img = document.getElementById('cardImage');
-            img.src = IMAGE_BASE_URL + card.image;
-            img.onerror = () => {
-                // 圖片載入失敗時顯示預設圖
-                img.style.display = 'none';
-                img.parentElement.innerHTML = `<div style="font-size: 120px; margin: 40px 0;">🎴</div>`;
-            };
-            
-            // 設定文字內容
-            document.getElementById('cardTitle').textContent = card.title;
-            document.getElementById('reminderText').textContent = card.reminder;
-            document.getElementById('meaningText').textContent = card.meaning;
-            document.getElementById('practiceText').textContent = card.practice;
-            
-            // 設定關鍵詞
-            if (card.keywords) {
-                const keywordsHTML = card.keywords.map(keyword => 
-                    `<span class="keyword-tag">${keyword}</span>`
-                ).join('');
-                document.getElementById('keywordsSection').innerHTML = keywordsHTML;
-            }
-            
-            // 切換顯示
-            document.getElementById('loadingSection').style.display = 'none';
-            document.getElementById('resultSection').style.display = 'block';
-            
-            // 捲動到頂部
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // 新查詢
-        function newSearch() {
-            document.getElementById('cardNumber').value = '';
-            document.getElementById('resultSection').style.display = 'none';
-            document.getElementById('searchSection').style.display = 'block';
-            document.getElementById('cardNumber').focus();
-        }
-        
-        // Enter 鍵送出
-        document.getElementById('cardNumber').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                showCard();
-            }
-        });
-        
-        // URL 參數支援（可以直接連結到特定卡片）
-        function checkURLParams() {
-            const params = new URLSearchParams(window.location.search);
-            const cardNum = params.get('card');
-            if (cardNum) {
-                document.getElementById('cardNumber').value = cardNum;
-                showCard();
-            }
-        }
-        
-        // 初始化
-        window.addEventListener('DOMContentLoaded', () => {
-            initQuickSelect();
-            checkURLParams();
-            
-            // 自動聚焦輸入框
-            document.getElementById('cardNumber').focus();
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解答之卡 - 線上查詢</title>
-    <meta name="description" content="解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
-    <meta property="og:title" content="解答之卡">
-    <meta property="og:description" content="輸入卡片編號，查看完整的心靈指引">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        
-        .container {
-            width: 100%;
-            max-width: 500px;
-        }
-        
-        .search-card {
-            background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            animation: fadeInUp 0.6s ease-out;
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .logo {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        h1 {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 700;
-        }
-        
-        .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 40px;
-            font-size: 16px;
-        }
-        
-        .input-group {
-            margin-bottom: 30px;
-        }
-        
-        .card-input {
-            width: 100%;
-            padding: 20px;
-            font-size: 24px;
-            text-align: center;
-            border: 3px solid #e0e0e0;
-            border-radius: 15px;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-        
-        .card-input:focus {
-            outline: none;
-            border-color: #667eea;
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
-        }
-        
-        .card-input::placeholder {
-            color: #bdc3c7;
-            font-weight: 400;
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            font-size: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-        }
-        
-        .submit-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .quick-select {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #ecf0f1;
-        }
-        
-        .quick-select h3 {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin-bottom: 15px;
-            font-weight: 500;
-        }
-        
-        .number-grid {
-            display: grid;
-            grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
-        }
-        
-        .number-btn {
-            padding: 10px;
-            border: 1px solid #e0e0e0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 14px;
-            color: #667eea;
-        }
-        
-        .number-btn:hover {
-            background: #667eea;
-            color: white;
-            transform: scale(1.1);
-        }
-        
-        .result-container {
-            display: none;
-            animation: fadeIn 0.6s ease-out;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .result-card {
-            background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-        }
-        
-        .card-image-section {
-            position: relative;
-            background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
-            padding: 40px 20px;
-            text-align: center;
-        }
-        
-        .card-number {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            color: #667eea;
-            backdrop-filter: blur(10px);
-        }
-        
-        .card-image {
-            max-width: 320px;
-            max-height: 320px;
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
-            animation: floatIn 0.8s ease-out;
-        }
-        
-        @keyframes floatIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        .card-content {
-            padding: 40px 30px;
-        }
-        
-        .card-title {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            text-align: center;
-            font-weight: 700;
-        }
-        
-        .content-section {
-            margin-bottom: 30px;
-        }
-        
-        .section-title {
-            display: flex;
-            align-items: center;
-            font-size: 18px;
-            color: #667eea;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .section-icon {
-            margin-right: 10px;
-            font-size: 24px;
-        }
-        
-        .reminder-box {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-            padding: 20px 25px;
-            border-radius: 15px;
-            font-size: 18px;
-            color: #5a6c8c;
-            font-style: italic;
-            line-height: 1.6;
-            border-left: 4px solid #667eea;
-        }
-        
-        .meaning-text {
-            line-height: 1.8;
-            color: #4a5568;
-            font-size: 16px;
-        }
-        
-        .practice-box {
-            background: linear-gradient(135deg, #fff9f0 0%, #fff5e6 100%);
-            padding: 20px 25px;
-            border-radius: 15px;
-            line-height: 1.6;
-            color: #6b5b3a;
-            border-left: 4px solid #ffa500;
-        }
-        
-        .keywords-section {
-            text-align: center;
-            padding: 20px 0;
-        }
-        
-        .keyword-tag {
-            display: inline-block;
-            padding: 8px 16px;
-            background: #e8f0ff;
-            color: #667eea;
-            border-radius: 20px;
-            margin: 5px;
-            font-size: 14px;
-            font-weight: 500;
-        }
-        
-        .action-buttons {
-            padding: 30px;
-            background: #f8f9fc;
-            text-align: center;
-        }
-        
-        .new-search-btn {
-            padding: 15px 40px;
-            background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .new-search-btn:hover {
-            background: #667eea;
-            color: white;
-        }
-        
-        @media (max-width: 600px) {
-            .search-card {
-                padding: 30px 20px;
-            }
-            
-            .card-title {
-                font-size: 26px;
-            }
-            
-            .number-grid {
-                grid-template-columns: repeat(6, 1fr);
-            }
-            
-            .card-image {
-                max-width: 280px;
-                max-height: 280px;
-            }
-        }
-        
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 40px;
-        }
-        
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(102, 126, 234, 0.3);
-            border-radius: 50%;
-            border-top-color: #667eea;
-            animation: spin 1s ease-in-out infinite;
-            margin: 0 auto 20px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="search-card" id="searchSection">
-            <div class="logo">🎴</div>
-            <h1>解答之卡</h1>
-            <p class="subtitle">輸入卡片編號，查看完整解讀</p>
-            
-            <div class="input-group">
-                <input type="number" 
-                       class="card-input" 
-                       id="cardNumber" 
-                       placeholder="1-60"
-                       min="1" 
-                       max="60"
-                       autofocus>
-            </div>
-            
-            <button class="submit-btn" onclick="showCard()">查看卡片解讀</button>
-            
-            <div class="quick-select">
-                <h3>快速選擇</h3>
-                <div class="number-grid" id="numberGrid"></div>
-            </div>
-        </div>
-        
-        <div class="loading" id="loadingSection">
-            <div class="loading-spinner"></div>
-            <p>正在載入卡片...</p>
-        </div>
-        
-        <div class="result-container" id="resultSection">
-            <div class="result-card">
-                <div class="card-image-section">
-                    <div class="card-number" id="displayCardNumber"></div>
-                    <img id="cardImage" class="card-image" alt="卡片圖像">
-                </div>
-                
-                <div class="card-content">
-                    <h2 class="card-title" id="cardTitle"></h2>
-                    
-                    <div class="content-section">
-                        <h3 class="section-title">
-                            <span class="section-icon">✦</span>
-                            正念提醒
-                        </h3>
-                        <div class="reminder-box" id="reminderText"></div>
-                    </div>
-                    
-                    <div class="content-section">
-                        <h3 class="section-title">
-                            <span class="section-icon">📖</span>
-                            牌卡解讀
-                        </h3>
-                        <p class="meaning-text" id="meaningText"></p>
-                    </div>
-                    
-                    <div class="content-section">
-                        <h3 class="section-title">
-                            <span class="section-icon">✨</span>
-                            正念練習
-                        </h3>
-                        <div class="practice-box" id="practiceText"></div>
-                    </div>
-                    
-                    <div class="keywords-section" id="keywordsSection"></div>
-                </div>
-                
-                <div class="action-buttons">
-                    <button class="new-search-btn" onclick="newSearch()">查詢其他卡片</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        // GitHub 設定 - 已更新為你的資訊
-        const GITHUB_USERNAME = 'nigelliu1221';
-        const GITHUB_REPO = 'oracle-cards';
-        const IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/images/`;
-        
-        // 卡片資料庫
-        const cardDatabase = {
-            1: {
-                title: "鶴｜內在穩定",
-                reminder: "放鬆一點，才聽得到內在的聲音。",
-                meaning: "焦慮來時，別急著排斥它的存在。當你選擇順應情緒、暫停評斷，節奏自然會放鬆，內心也會變得更清楚。你不需立即知道答案，只需先與此刻和平共處，平靜就會慢慢回來。",
-                practice: "當感到不安，閉眼深呼吸三次，把注意力放回呼吸與身體感受。",
-                keywords: ["放鬆", "內在聲音", "平靜", "和平共處"],
-                image: "01-crane.png"
-            },
-            2: {
-                title: "兔子｜接納流動",
-                reminder: "差異不是威脅，而是轉化的起點。",
-                meaning: "你可能面對內外拉扯、矛盾的想法或意見分歧。無論是與人相處還是自我掙扎，都不需急著統一觀點。當你學會同時容納多種可能性，內心的柔軟與智慧將隨之展現。",
-                practice: "列出當前兩種矛盾的聲音，試著站在第三個角度來理解它們的存在理由。",
-                keywords: ["差異", "轉化", "容納", "柔軟"],
-                image: "02-rabbit.png"
-            },
-            3: {
-                title: "狐狸｜自信成長",
-                reminder: "相信自己，你能做得更好。",
-                meaning: "你擁有更多的潛力，只需跨出第一步，就能看見新的可能性。面對挑戰，不必退縮。踏出舒適圈後，你將發現原來的自己其實早已準備好迎接下一段旅程。",
-                practice: "挑選一件想嘗試卻猶豫的事，今天進行一小步行動，觀察變化感受。",
-                keywords: ["潛力", "挑戰", "舒適圈", "可能性"],
-                image: "03-fox.png"
-            },
-            4: {
-                title: "刺蝟｜關愛共鳴",
-                reminder: "靠得太近會刺痛，留點空間才能更親密。",
-                meaning: "真正長久的關係，從來不是緊密無間的依附，而是建立在適當距離與深刻尊重之上的平衡。你不需要時時黏在一起，反而應保有彼此呼吸與成長的空間。這不是疏離，而是一種更成熟的靠近。",
-                practice: "今天刻意給彼此一段獨處時間，觀察這段留白是否讓關係更自在。",
-                keywords: ["距離", "尊重", "平衡", "成熟"],
-                image: "04-hedgehog.png"
-            },
-            5: {
-                title: "鹿｜轉化覺醒",
-                reminder: "不需急著成熟，你的蛻變自有節奏。",
-                meaning: "當你正在成長的轉角，蛻變也許帶著不確定與不安。其實變化本身就是學習的一環。不必催促自己走得快，每個調整都是向內靠近的過程。只要你願意持續前進，力量自然會逐漸顯現。",
-                practice: "今天為自己設定一件「還不熟練，但願意嘗試」的小任務，記錄你從中發現了什麼。",
-                keywords: ["蛻變", "成長", "節奏", "力量"],
-                image: "05-deer.png"
-            },
-            6: {
-                title: "鯨魚｜行動突破",
-                reminder: "穩住當下，比衝出去更能走得遠。",
-                meaning: "行動前的躊躇不安，往往源自未整理的焦慮。唯有放慢節奏，重新檢視當前的狀態與需求，才能將那些混亂的情緒轉化為前行的火焰。當你不再匆促，就會發現內在早已準備好踏出那一步。",
-                practice: "選擇一件你最近猶豫的任務，寫下你最擔心的結果，並寫下「如果發生了，我會怎麼做」。",
-                keywords: ["穩定", "節奏", "焦慮", "準備"],
-                image: "06-whale.png"
-            },
-            7: {
-                title: "大象｜內在穩定",
-                reminder: "慢下來，才看得見清晰的風景。",
-                meaning: "心煩意亂時，不妨讓自己慢一點。放下「馬上要解決」的焦慮，允許自己暫觀當下變化。你會發現，當節奏緩下來，原本模糊的方向，也會漸漸浮現眼前。",
-                practice: "今天用比平常更慢的速度吃飯或走路，觀察內心是否也隨之放鬆。",
-                keywords: ["慢下來", "清晰", "節奏", "方向"],
-                image: "07-elephant.png"
-            },
-            8: {
-                title: "鯨魚｜接納流動",
-                reminder: "不是每件事都要掌控，順流反而更穩。",
-                meaning: "你或許正緊抓某個計畫、期待或節奏，但內在其實早已感到疲憊。放手不是放棄，而是相信事情會以適合的形式展開。當你學會信任節奏，將發現更流暢的可能。",
-                practice: "今天觀察一件你「很想掌握」的事，試著鬆手一點，讓它自然發展。",
-                keywords: ["放手", "信任", "節奏", "流暢"],
-                image: "08-whale2.png"
-            },
-            9: {
-                title: "浣熊｜自信成長",
-                reminder: "累積一步步，終將帶你飛躍。",
-                meaning: "過去的努力與經驗，是你通向更高處的基石。當你學會回顧自己的歷程，就會看見自己走得很遠。穩定地前進，讓眼界持續擴張，終能踏上更寬闊的方向。",
-                practice: "記錄你近半年完成的一件成果，寫下它帶來的幫助與變化。",
-                keywords: ["累積", "經驗", "眼界", "前進"],
-                image: "09-raccoon.png"
-            },
-            10: {
-                title: "鶴｜關愛共鳴",
-                reminder: "牽掛若成束縛，就該重新定義愛的模樣。",
-                meaning: "任何關係中若讓你感到失去自由，或總在壓抑自己以配合對方，那應是時候看看這樣的付出是否值得。你可以溫柔對待他人，同時，也不忘為自己留一片自由呼吸的空間。",
-                practice: "問問自己：「我是否在這段關係中，自在做自己？」",
-                keywords: ["牽掛", "束縛", "自由", "空間"],
-                image: "10-crane2.png"
-            },
-            11: {
-                title: "樹懶｜轉化覺醒",
-                reminder: "慢一點，才聽得到內在的聲音。",
-                meaning: "當你感覺遲疑、迷茫，並不代表你停滯了。有些階段正是生命邀請你進入更深的照見層次。放下對「立刻知道該做什麼」的執念，你的直覺會以最柔和的方式指引你，察覺潛藏在當下的訊號。",
-                practice: "今天選擇一件原本想「趕快搞定」的事，刻意放「慢流程」，觀察過程中新的感受或靈感浮現。",
-                keywords: ["慢", "直覺", "照見", "訊號"],
-                image: "11-sloth.png"
-            },
-            12: {
-                title: "蝴蝶｜行動突破",
-                reminder: "看懂時機，行動才能有力。",
-                meaning: "起飛前，蝴蝶總是審慎感受風向。理解整體局勢與時機，是順利前行的關鍵。你不需要一步到位，而是需要一次精準的出擊。別讓猶豫拖住腳，也別讓衝動模糊眼光。",
-                practice: "列出今天最想解決的一件事，選一個具體行動並設定限時 30 分鐘完成。",
-                keywords: ["時機", "精準", "局勢", "出擊"],
-                image: "12-butterfly.png"
-            },
-            13: {
-                title: "浣熊｜內在穩定",
-                reminder: "停一停，讓情緒有個出口。",
-                meaning: "情緒不是敵人，而是訊號。當你願意看見、接納它的來訪，情緒會逐漸被安撫，內在也會更穩定清晰。真正的內靜，不是壓抑，而是願意溫柔地面對與覺察感受。",
-                practice: "靜坐一分鐘，覺察自己此刻的情緒，並對自己說：「我可以有這樣的情緒。」",
-                keywords: ["情緒", "接納", "覺察", "內靜"],
-                image: "13-raccoon2.png"
-            },
-            14: {
-                title: "樹蛙｜接納流動",
-                reminder: "最真實的路徑，藏在當下的細節裡。",
-                meaning: "當思緒漂浮不定，你可能錯過眼前其實早已浮現的方向與資源。你的心越能停留當下，就越能從中接收清晰的訊息。紛擾來自過去與未來，寧靜來自當下。",
-                practice: "選一個生活片刻（如吃飯、走路），用全部感官去體會它，不評論，只觀察。",
-                keywords: ["當下", "細節", "訊息", "寧靜"],
-                image: "14-treefrog.png"
-            },
-            15: {
-                title: "鹿｜自信成長",
-                reminder: "每個努力的時刻，都是幫你發光。",
-                meaning: "別小看你所能。努力耕耘時光，最終會在某個時刻綻放光芒。當試著突破原有限制，在行動中學習，讓你的成長之路持續拓寬。相信自己所做的每一件事，都是實力的累積與擴張。",
-                practice: "寫下你今天完成的一件小事，肯定它對你造成的正向影響，再寫出下一步你可以做的行動。",
-                keywords: ["努力", "光芒", "突破", "實力"],
-                image: "15-deer2.png"
-            },
-            16: {
-                title: "兔子｜關愛共鳴",
-                reminder: "安靜地聽自己，才能知道關係的方向。",
-                meaning: "當你感到不確定，與其向外尋找答案，不如回頭傾聽自己內心的聲音。你真正渴望的愛是支持還是距離？關係的持續需要雙方的節奏相合，而那份安靜會在你誠實面對心意時浮現。",
-                practice: "今天留意與他人互動時，你是舒服地做自己，還是在壓抑或迴避？",
-                keywords: ["傾聽", "內心", "節奏", "誠實"],
-                image: "16-rabbit2.png"
-            },
-            17: {
-                title: "刺蝟｜轉化覺醒",
-                reminder: "你所尋的力量，從來不在別人身上。",
-                meaning: "也許你習慣了保護自己、不輕易顯露真實感受。但當你慢慢開始信任自己的直覺與價值，那些被壓抑的力量將有機會顯露。你的潛能其實一直都在，只是需要一個契機喚醒它。",
-                practice: "今天挑選一個你擅長卻常忽略的能力，為它安排一次小小的發揮空間。",
-                keywords: ["力量", "信任", "潛能", "顯露"],
-                image: "17-hedgehog2.png"
-            },
-            18: {
-                title: "猴子｜行動突破",
-                reminder: "真正的解法，藏在冷靜背後。",
-                meaning: "當情緒高漲或困境來襲，第一反應常是逃避或衝撞，但這往往無助於真正跨越。冷靜地看清問題核心，才能辨明方向並減少耗損。穩定情緒，是建立行動力的基礎。",
-                practice: "在決定一件事前，思考「我此刻的感受是什麼？我希望得到的結果是什麼？」",
-                keywords: ["冷靜", "核心", "方向", "穩定"],
-                image: "18-monkey.png"
-            },
-            19: {
-                title: "信天翁｜內在穩定",
-                reminder: "你不需要做到每一件事都完美。",
-                meaning: "追求完美容易讓內在長期處於緊繃狀態。允許自己適度鬆懈，是一種成熟的選擇。當你給自己空間喘息，才能在柔軟中表出穩定與清明，也讓心變得更有彈性。",
-                practice: "今天選一件事用「剛剛好」完成，不必事事滿分，依然值得肯定。",
-                keywords: ["完美", "鬆懈", "彈性", "清明"],
-                image: "19-albatross.png"
-            },
-            20: {
-                title: "大象｜接納流動",
-                reminder: "不急著平靜，起伏也是一種節奏。",
-                meaning: "你可能正處於狀態波動的階段，情緒、進度、人際互動都起伏不定。這張牌鼓勵你先暫停對抗，試著面對不完美其實。每一次不適的感受，其實都是生活對你的提醒，而非責備。",
-                practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位
