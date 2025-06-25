@@ -30,7 +30,6 @@
             max-width: 500px;
         }
         
-        /* 首頁查詢 */
         .search-card {
             background: white;
             border-radius: 20px;
@@ -119,7 +118,6 @@
             transform: translateY(-1px);
         }
         
-        /* 快速選擇 */
         .quick-select {
             margin-top: 30px;
             padding-top: 30px;
@@ -156,7 +154,6 @@
             transform: scale(1.1);
         }
         
-        /* 結果顯示 */
         .result-container {
             display: none;
             animation: fadeIn 0.6s ease-out;
@@ -174,7 +171,6 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
         
-        /* 卡片圖片 */
         .card-image-section {
             position: relative;
             background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
@@ -215,7 +211,6 @@
             }
         }
         
-        /* 卡片內容 */
         .card-content {
             padding: 40px 30px;
         }
@@ -272,7 +267,6 @@
             border-left: 4px solid #ffa500;
         }
         
-        /* 關鍵詞 */
         .keywords-section {
             text-align: center;
             padding: 20px 0;
@@ -289,7 +283,6 @@
             font-weight: 500;
         }
         
-        /* 底部按鈕 */
         .action-buttons {
             padding: 30px;
             background: #f8f9fc;
@@ -313,7 +306,6 @@
             color: white;
         }
         
-        /* 響應式設計 */
         @media (max-width: 600px) {
             .search-card {
                 padding: 30px 20px;
@@ -333,7 +325,6 @@
             }
         }
         
-        /* 載入動畫 */
         .loading {
             display: none;
             text-align: center;
@@ -357,7 +348,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- 查詢介面 -->
         <div class="search-card" id="searchSection">
             <div class="logo">🎴</div>
             <h1>解答之卡</h1>
@@ -375,29 +365,24 @@
             
             <button class="submit-btn" onclick="showCard()">查看卡片解讀</button>
             
-            <!-- 快速選擇（選用） -->
             <div class="quick-select">
                 <h3>快速選擇</h3>
                 <div class="number-grid" id="numberGrid"></div>
             </div>
         </div>
         
-        <!-- 載入中 -->
         <div class="loading" id="loadingSection">
             <div class="loading-spinner"></div>
             <p>正在載入卡片...</p>
         </div>
         
-        <!-- 結果顯示 -->
         <div class="result-container" id="resultSection">
             <div class="result-card">
-                <!-- 圖片區 -->
                 <div class="card-image-section">
                     <div class="card-number" id="displayCardNumber"></div>
                     <img id="cardImage" class="card-image" alt="卡片圖像">
                 </div>
                 
-                <!-- 內容區 -->
                 <div class="card-content">
                     <h2 class="card-title" id="cardTitle"></h2>
                     
@@ -428,7 +413,6 @@
                     <div class="keywords-section" id="keywordsSection"></div>
                 </div>
                 
-                <!-- 返回按鈕 -->
                 <div class="action-buttons">
                     <button class="new-search-btn" onclick="newSearch()">查詢其他卡片</button>
                 </div>
@@ -437,11 +421,50 @@
     </div>
     
     <script>
-        // GitHub 設定 - 請更新成你的資訊
-        const GITHUB_USERNAME = 'nigel-id';  // 你的 GitHub 用戶名
-        const GITHUB_REPO = 'oracle-cards';  // 你的倉庫名稱
+        // GitHub 設定 - 已更新為你的資訊
+        const GITHUB_USERNAME = 'nigelliu1221';
+        const GITHUB_REPO = 'oracle-cards';
         const IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/images/`;
-           
+        
+        // 卡片資料庫
+        const cardDatabase = {
+            1: {
+                title: "鶴｜內在穩定",
+                reminder: "放鬆一點，才聽得到內在的聲音。",
+                meaning: "焦慮來時，別急著排斥它的存在。當你選擇順應情緒、暫停評斷，節奏自然會放鬆，內心也會變得更清楚。你不需立即知道答案，只需先與此刻和平共處，平靜就會慢慢回來。",
+                practice: "當感到不安，閉眼深呼吸三次，把注意力放回呼吸與身體感受。",
+                keywords: ["放鬆", "內在聲音", "平靜", "和平共處"],
+                image: "01-crane.png"
+            },
+            2: {
+                title: "兔子｜接納流動",
+                reminder: "差異不是威脅，而是轉化的起點。",
+                meaning: "你可能面對內外拉扯、矛盾的想法或意見分歧。無論是與人相處還是自我掙扎，都不需急著統一觀點。當你學會同時容納多種可能性，內心的柔軟與智慧將隨之展現。",
+                practice: "列出當前兩種矛盾的聲音，試著站在第三個角度來理解它們的存在理由。",
+                keywords: ["差異", "轉化", "容納", "柔軟"],
+                image: "02-rabbit.png"
+            },
+            3: {
+                title: "狐狸｜自信成長",
+                reminder: "相信自己，你能做得更好。",
+                meaning: "你擁有更多的潛力，只需跨出第一步，就能看見新的可能性。面對挑戰，不必退縮。踏出舒適圈後，你將發現原來的自己其實早已準備好迎接下一段旅程。",
+                practice: "挑選一件想嘗試卻猶豫的事，今天進行一小步行動，觀察變化感受。",
+                keywords: ["潛力", "挑戰", "舒適圈", "可能性"],
+                image: "03-fox.png"
+            },
+            4: {
+                title: "刺蝟｜關愛共鳴",
+                reminder: "靠得太近會刺痛，留點空間才能更親密。",
+                meaning: "真正長久的關係，從來不是緊密無間的依附，而是建立在適當距離與深刻尊重之上的平衡。你不需要時時黏在一起，反而應保有彼此呼吸與成長的空間。這不是疏離，而是一種更成熟的靠近。",
+                practice: "今天刻意給彼此一段獨處時間，觀察這段留白是否讓關係更自在。",
+                keywords: ["距離", "尊重", "平衡", "成熟"],
+                image: "04-hedgehog.png"
+            },
+            5: {
+                title: "鹿｜轉化覺醒",
+                reminder: "不需急著成熟，你的蛻變自有節奏。",
+                meaning: "當你正在成長的轉角，蛻變也許帶著不確定與不安。其實變化本身就是學習的一環。不必催促自己走得快，每個調整都是向內靠近的過程。只要你願意持續前進，力量自然會逐漸顯現。",
+                practice: "今天為自己設定一件「還不熟練，但願意嘗試」的小任
         // 卡片資料庫
         const cardDatabase = {
             1: {
