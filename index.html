@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>明想解答之卡 - 線上查詢</title>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/nigelliu1221/oracle-cards/main/images/logo.png">
+    <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/nigelliu1221/oracle-cards/main/images/logo.png">
     <meta name="description" content="明想解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
     <meta property="og:title" content="明想解答之卡">
     <meta property="og:description" content="輸入卡片編號，查看完整的心靈指引">
@@ -430,7 +432,9 @@
             <div class="result-card">
                 <div class="card-image-section">
                     <div class="card-number" id="displayCardNumber"></div>
-                    <img id="cardImage" class="card-image" alt="卡片圖像">
+                    <div class="card-image-container">
+                        <img id="cardImage" class="card-image" alt="卡片圖像">
+                    </div>
                 </div>
                 
                 <div class="card-content">
@@ -998,24 +1002,27 @@
         function loadCardImage(cardNum, callback) {
             const card = cardDatabase[cardNum];
             const img = document.getElementById('cardImage');
+            const imageContainer = img.parentElement;
             
             // 顯示載入中的佔位符
             img.style.display = 'none';
-            const imageSection = img.parentElement;
-            let loadingPlaceholder = imageSection.querySelector('.image-loading');
+            let loadingPlaceholder = imageContainer.querySelector('.image-loading');
             
             if (!loadingPlaceholder) {
                 loadingPlaceholder = document.createElement('div');
                 loadingPlaceholder.className = 'image-loading';
                 loadingPlaceholder.style.cssText = `
                     font-size: 80px; 
-                    margin: 40px 0; 
-                    color: #667eea;
+                    color: #007aff;
                     opacity: 0.6;
                     animation: pulse 1.5s ease-in-out infinite;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: center;
                 `;
-                loadingPlaceholder.innerHTML = '🎴<br><small style="font-size: 14px;">載入中...</small>';
-                imageSection.appendChild(loadingPlaceholder);
+                loadingPlaceholder.innerHTML = '🎴<br><small style="font-size: 14px; margin-top: 8px;">載入中...</small>';
+                imageContainer.appendChild(loadingPlaceholder);
             }
             
             // 建立新的圖片元素進行預載
@@ -1032,7 +1039,13 @@
             newImg.onerror = () => {
                 // 圖片載入失敗時顯示預設圖
                 if (loadingPlaceholder) {
-                    loadingPlaceholder.style.cssText = 'font-size: 120px; margin: 40px 0; color: #667eea;';
+                    loadingPlaceholder.style.cssText = `
+                        font-size: 120px; 
+                        color: #007aff;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    `;
                     loadingPlaceholder.innerHTML = '🎴';
                 }
                 img.style.display = 'none';
@@ -1116,8 +1129,8 @@
             const img = document.getElementById('cardImage');
             img.style.display = 'block';
             img.src = '';
-            const imageSection = img.parentElement;
-            const placeholder = imageSection.querySelector('.image-loading');
+            const imageContainer = img.parentElement;
+            const placeholder = imageContainer.querySelector('.image-loading');
             if (placeholder) {
                 placeholder.remove();
             }
