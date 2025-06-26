@@ -344,6 +344,16 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 10px;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 8px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -361,6 +371,7 @@
                        min="1" 
                        max="60"
                        autofocus>
+                <div class="error-message" id="errorMessage"></div>
             </div>
             
             <button class="submit-btn" onclick="showCard()">查看卡片解讀</button>
@@ -421,7 +432,7 @@
     </div>
     
     <script>
-        // GitHub 設定 - 已更新為你的資訊
+        // GitHub 設定
         const GITHUB_USERNAME = 'nigelliu1221';
         const GITHUB_REPO = 'oracle-cards';
         const IMAGE_BASE_URL = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/images/`;
@@ -464,8 +475,11 @@
                 title: "鹿｜轉化覺醒",
                 reminder: "不需急著成熟，你的蛻變自有節奏。",
                 meaning: "當你正在成長的轉角，蛻變也許帶著不確定與不安。其實變化本身就是學習的一環。不必催促自己走得快，每個調整都是向內靠近的過程。只要你願意持續前進，力量自然會逐漸顯現。",
-                practice: "今天為自己設定一件「還不熟練，但願意嘗試」的小任
-                    6: {
+                practice: "今天為自己設定一件「還不熟練，但願意嘗試」的小任務。",
+                keywords: ["蛻變", "成長", "節奏", "力量"],
+                image: "05-deer.png"
+            },
+            6: {
                 title: "鯨魚｜行動突破",
                 reminder: "穩住當下，比衝出去更能走得遠。",
                 meaning: "行動前的躊躇不安，往往源自未整理的焦慮。唯有放慢節奏，重新檢視當前的狀態與需求，才能將那些混亂的情緒轉化為前行的火焰。當你不再匆促，就會發現內在早已準備好踏出那一步。",
@@ -579,7 +593,7 @@
             },
             20: {
                 title: "大象｜接納流動",
-                reminder:reminder: "不急著平靜，起伏也是一種節奏。",
+                reminder: "不急著平靜，起伏也是一種節奏。",
                 meaning: "你可能正處於狀態波動的階段，情緒、進度、人際互動都起伏不定。這張牌鼓勵你先暫停對抗，試著面對不完美其實。每一次不適的感受，其實都是生活對你的提醒，而非責備。",
                 practice: "安靜坐三分鐘，觀察身體中是否有情緒殘留的位置，輕輕呼氣。",
                 keywords: ["起伏", "節奏", "接納", "提醒"],
@@ -865,7 +879,7 @@
                 keywords: ["安定", "沉靜", "釐清", "明智"],
                 image: "55-jellyfish.png"
             },
-56: {
+            56: {
                 title: "蜜蜂｜接納流動",
                 reminder: "問題的存在，是邀請你靠近自己。",
                 meaning: "當你感到困惑，別急著尋找外在答案。疑問往往是內在正在重新排列價值、界線、渴望的徵兆。你不是走錯路，而是正在進入更細緻的自我理解過程中。",
@@ -907,6 +921,16 @@
             }
         };
         
+        // 顯示錯誤訊息
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 3000);
+        }
+        
         // 初始化快速選擇按鈕
         function initQuickSelect() {
             const grid = document.getElementById('numberGrid');
@@ -927,7 +951,7 @@
             const cardNum = parseInt(document.getElementById('cardNumber').value);
             
             if (!cardNum || cardNum < 1 || cardNum > 60) {
-                alert('請輸入 1-60 之間的數字');
+                showError('請輸入 1-60 之間的數字');
                 return;
             }
             
@@ -935,7 +959,7 @@
             document.getElementById('searchSection').style.display = 'none';
             document.getElementById('loadingSection').style.display = 'block';
             
-            // 模擬載入時間（實際使用時可能需要載入圖片）
+            // 模擬載入時間
             setTimeout(() => {
                 displayCardResult(cardNum);
             }, 500);
@@ -946,7 +970,7 @@
             const card = cardDatabase[cardNum];
             
             if (!card) {
-                alert('找不到該卡片資料');
+                showError('找不到該卡片資料');
                 document.getElementById('loadingSection').style.display = 'none';
                 document.getElementById('searchSection').style.display = 'block';
                 return;
@@ -961,7 +985,11 @@
             img.onerror = () => {
                 // 圖片載入失敗時顯示預設圖
                 img.style.display = 'none';
-                img.parentElement.innerHTML = `<div style="font-size: 120px; margin: 40px 0;">🎴</div>`;
+                const imageSection = img.parentElement;
+                const fallbackDiv = document.createElement('div');
+                fallbackDiv.style.cssText = 'font-size: 120px; margin: 40px 0; color: #667eea;';
+                fallbackDiv.textContent = '🎴';
+                imageSection.appendChild(fallbackDiv);
             };
             
             // 設定文字內容
@@ -971,7 +999,7 @@
             document.getElementById('practiceText').textContent = card.practice;
             
             // 設定關鍵詞
-            if (card.keywords) {
+            if (card.keywords && card.keywords.length > 0) {
                 const keywordsHTML = card.keywords.map(keyword => 
                     `<span class="keyword-tag">${keyword}</span>`
                 ).join('');
@@ -992,6 +1020,15 @@
             document.getElementById('resultSection').style.display = 'none';
             document.getElementById('searchSection').style.display = 'block';
             document.getElementById('cardNumber').focus();
+            
+            // 重置圖片區域
+            const img = document.getElementById('cardImage');
+            img.style.display = 'block';
+            const imageSection = img.parentElement;
+            const fallbackDiv = imageSection.querySelector('div');
+            if (fallbackDiv) {
+                fallbackDiv.remove();
+            }
         }
         
         // Enter 鍵送出
@@ -1001,11 +1038,11 @@
             }
         });
         
-        // URL 參數支援（可以直接連結到特定卡片）
+        // URL 參數支援
         function checkURLParams() {
             const params = new URLSearchParams(window.location.search);
             const cardNum = params.get('card');
-            if (cardNum) {
+            if (cardNum && cardNum >= 1 && cardNum <= 60) {
                 document.getElementById('cardNumber').value = cardNum;
                 showCard();
             }
@@ -1021,4 +1058,4 @@
         });
     </script>
 </body>
-                
+</html>
