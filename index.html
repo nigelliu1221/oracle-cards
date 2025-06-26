@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>解答之卡 - 線上查詢</title>
-    <meta name="description" content="解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
-    <meta property="og:title" content="解答之卡">
+    <title>明想解答之卡 - 線上查詢</title>
+    <meta name="description" content="明想解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
+    <meta property="og:title" content="明想解答之卡">
     <meta property="og:description" content="輸入卡片編號，查看完整的心靈指引">
     <style>
         * {
@@ -15,14 +15,15 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", sans-serif;
+            background: #f5f5f7;
             min-height: 100vh;
-            color: #333;
+            color: #1d1d1f;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            line-height: 1.4;
         }
         
         .container {
@@ -32,17 +33,18 @@
         
         .search-card {
             background: white;
-            border-radius: 20px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 18px;
+            padding: 40px 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             text-align: center;
             animation: fadeInUp 0.6s ease-out;
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(20px);
             }
             to {
                 opacity: 1;
@@ -51,112 +53,130 @@
         }
         
         .logo {
-            font-size: 48px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        
+        .logo-image {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo-emoji {
+            font-size: 42px;
         }
         
         h1 {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 10px;
-            font-weight: 700;
+            font-size: 28px;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
         }
         
         .subtitle {
-            color: #7f8c8d;
-            margin-bottom: 40px;
-            font-size: 16px;
+            color: #86868b;
+            margin-bottom: 32px;
+            font-size: 17px;
+            font-weight: 400;
         }
         
         .input-group {
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
         
         .card-input {
             width: 100%;
-            padding: 20px;
-            font-size: 24px;
+            padding: 16px 20px;
+            font-size: 20px;
             text-align: center;
-            border: 3px solid #e0e0e0;
-            border-radius: 15px;
-            transition: all 0.3s;
-            font-weight: 600;
+            border: 1px solid #d2d2d7;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            background: #fbfbfd;
         }
         
         .card-input:focus {
             outline: none;
-            border-color: #667eea;
-            transform: scale(1.02);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+            border-color: #007aff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
         }
         
         .card-input::placeholder {
-            color: #bdc3c7;
+            color: #c7c7cc;
             font-weight: 400;
         }
         
         .submit-btn {
             width: 100%;
-            padding: 18px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px;
+            background: #007aff;
             color: white;
             border: none;
-            border-radius: 15px;
-            font-size: 20px;
+            border-radius: 12px;
+            font-size: 17px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
         }
         
         .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-        }
-        
-        .submit-btn:active {
+            background: #0056cc;
             transform: translateY(-1px);
         }
         
+        .submit-btn:active {
+            transform: translateY(0);
+            background: #004499;
+        }
+        
         .quick-select {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #ecf0f1;
+            margin-top: 32px;
+            padding-top: 24px;
+            border-top: 1px solid #f2f2f7;
         }
         
         .quick-select h3 {
-            color: #7f8c8d;
-            font-size: 14px;
-            margin-bottom: 15px;
+            color: #86868b;
+            font-size: 15px;
+            margin-bottom: 16px;
             font-weight: 500;
         }
         
         .number-grid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 8px;
+            gap: 6px;
         }
         
         .number-btn {
             padding: 10px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid #e5e5ea;
             background: white;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.15s ease;
             font-size: 14px;
-            color: #667eea;
+            color: #007aff;
+            font-weight: 500;
         }
         
         .number-btn:hover {
-            background: #667eea;
+            background: #007aff;
             color: white;
-            transform: scale(1.1);
+            border-color: #007aff;
         }
         
         .result-container {
             display: none;
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.4s ease-out;
         }
         
         @keyframes fadeIn {
@@ -166,44 +186,46 @@
         
         .result-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.04);
         }
         
         .card-image-section {
             position: relative;
-            background: linear-gradient(180deg, #f0f4ff 0%, #ffffff 100%);
-            padding: 40px 20px;
+            background: #f8f9fa;
+            padding: 32px 20px;
             text-align: center;
         }
         
         .card-number {
             position: absolute;
-            top: 20px;
-            left: 20px;
+            top: 16px;
+            left: 16px;
             background: rgba(255, 255, 255, 0.9);
-            padding: 8px 16px;
-            border-radius: 20px;
+            padding: 6px 12px;
+            border-radius: 16px;
             font-weight: 600;
-            color: #667eea;
+            color: #007aff;
+            font-size: 14px;
             backdrop-filter: blur(10px);
         }
         
         .card-image {
-            max-width: 320px;
-            max-height: 320px;
+            max-width: 280px;
+            max-height: 280px;
             width: 100%;
             height: auto;
             object-fit: contain;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.15));
-            animation: floatIn 0.8s ease-out;
+            border-radius: 12px;
+            animation: floatIn 0.6s ease-out;
         }
         
         @keyframes floatIn {
             from {
                 opacity: 0;
-                transform: translateY(20px) scale(0.9);
+                transform: translateY(10px) scale(0.95);
             }
             to {
                 opacity: 1;
@@ -212,107 +234,109 @@
         }
         
         .card-content {
-            padding: 40px 30px;
+            padding: 32px 24px;
         }
         
         .card-title {
-            font-size: 32px;
-            color: #2c3e50;
-            margin-bottom: 30px;
+            font-size: 24px;
+            color: #1d1d1f;
+            margin-bottom: 24px;
             text-align: center;
-            font-weight: 700;
+            font-weight: 600;
+            letter-spacing: -0.3px;
         }
         
         .content-section {
-            margin-bottom: 30px;
+            margin-bottom: 24px;
         }
         
         .section-title {
             display: flex;
             align-items: center;
-            font-size: 18px;
-            color: #667eea;
-            margin-bottom: 15px;
+            font-size: 17px;
+            color: #007aff;
+            margin-bottom: 12px;
             font-weight: 600;
         }
         
         .section-icon {
-            margin-right: 10px;
-            font-size: 24px;
+            margin-right: 8px;
+            font-size: 18px;
         }
         
         .reminder-box {
-            background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
-            padding: 20px 25px;
-            border-radius: 15px;
-            font-size: 18px;
-            color: #5a6c8c;
+            background: #f0f8ff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            color: #1d1d1f;
             font-style: italic;
-            line-height: 1.6;
-            border-left: 4px solid #667eea;
+            line-height: 1.5;
+            border-left: 3px solid #007aff;
         }
         
         .meaning-text {
-            line-height: 1.8;
-            color: #4a5568;
+            line-height: 1.6;
+            color: #1d1d1f;
             font-size: 16px;
         }
         
         .practice-box {
-            background: linear-gradient(135deg, #fff9f0 0%, #fff5e6 100%);
-            padding: 20px 25px;
-            border-radius: 15px;
+            background: #fff8e1;
+            padding: 16px 20px;
+            border-radius: 12px;
             line-height: 1.6;
-            color: #6b5b3a;
-            border-left: 4px solid #ffa500;
+            color: #1d1d1f;
+            border-left: 3px solid #ff9500;
+            font-size: 16px;
         }
         
         .keywords-section {
             text-align: center;
-            padding: 20px 0;
+            padding: 16px 0;
         }
         
         .keyword-tag {
             display: inline-block;
-            padding: 8px 16px;
-            background: #e8f0ff;
-            color: #667eea;
-            border-radius: 20px;
-            margin: 5px;
+            padding: 6px 12px;
+            background: #f2f2f7;
+            color: #007aff;
+            border-radius: 16px;
+            margin: 4px;
             font-size: 14px;
             font-weight: 500;
         }
         
         .action-buttons {
-            padding: 30px;
-            background: #f8f9fc;
+            padding: 24px;
+            background: #fbfbfd;
             text-align: center;
         }
         
         .new-search-btn {
-            padding: 15px 40px;
+            padding: 12px 32px;
             background: white;
-            color: #667eea;
-            border: 2px solid #667eea;
-            border-radius: 10px;
+            color: #007aff;
+            border: 1px solid #007aff;
+            border-radius: 20px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s ease;
         }
         
         .new-search-btn:hover {
-            background: #667eea;
+            background: #007aff;
             color: white;
         }
         
         @media (max-width: 600px) {
             .search-card {
-                padding: 30px 20px;
+                padding: 32px 24px;
             }
             
             .card-title {
-                font-size: 26px;
+                font-size: 22px;
             }
             
             .number-grid {
@@ -320,8 +344,8 @@
             }
             
             .card-image {
-                max-width: 280px;
-                max-height: 280px;
+                max-width: 240px;
+                max-height: 240px;
             }
         }
         
@@ -329,16 +353,19 @@
             display: none;
             text-align: center;
             padding: 40px;
+            background: white;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
         }
         
         .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 4px solid rgba(102, 126, 234, 0.3);
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f2f2f7;
             border-radius: 50%;
-            border-top-color: #667eea;
+            border-top-color: #007aff;
             animation: spin 1s ease-in-out infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 16px;
         }
         
         @keyframes spin {
@@ -346,21 +373,33 @@
         }
 
         .error-message {
-            color: #e74c3c;
+            color: #ff3b30;
             font-size: 14px;
-            margin-top: 10px;
-            padding: 10px;
-            background: #ffebee;
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #fff0f0;
             border-radius: 8px;
             display: none;
+            border: 1px solid #ffebee;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="search-card" id="searchSection">
-            <div class="logo">🎴</div>
-            <h1>解答之卡</h1>
+            <div class="logo">
+                <img src="https://raw.githubusercontent.com/nigelliu1221/oracle-cards/main/images/logo.png" 
+                     alt="明想解答之卡 Logo" 
+                     class="logo-image"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='inline';">
+                <span class="logo-emoji" style="display: none;">🎴</span>
+            </div>
+            <h1>明想解答之卡</h1>
             <p class="subtitle">輸入卡片編號，查看完整解讀</p>
             
             <div class="input-group">
@@ -946,7 +985,71 @@
             }
         }
         
-        // 顯示卡片
+        // 優化：預載入前5張最常使用的卡片圖片
+        function preloadPopularImages() {
+            const popularCards = [1, 2, 3, 4, 5];
+            popularCards.forEach(cardNum => {
+                const img = new Image();
+                img.src = IMAGE_BASE_URL + cardDatabase[cardNum].image;
+            });
+        }
+        
+        // 優化：圖片載入處理
+        function loadCardImage(cardNum, callback) {
+            const card = cardDatabase[cardNum];
+            const img = document.getElementById('cardImage');
+            
+            // 顯示載入中的佔位符
+            img.style.display = 'none';
+            const imageSection = img.parentElement;
+            let loadingPlaceholder = imageSection.querySelector('.image-loading');
+            
+            if (!loadingPlaceholder) {
+                loadingPlaceholder = document.createElement('div');
+                loadingPlaceholder.className = 'image-loading';
+                loadingPlaceholder.style.cssText = `
+                    font-size: 80px; 
+                    margin: 40px 0; 
+                    color: #667eea;
+                    opacity: 0.6;
+                    animation: pulse 1.5s ease-in-out infinite;
+                `;
+                loadingPlaceholder.innerHTML = '🎴<br><small style="font-size: 14px;">載入中...</small>';
+                imageSection.appendChild(loadingPlaceholder);
+            }
+            
+            // 建立新的圖片元素進行預載
+            const newImg = new Image();
+            newImg.onload = () => {
+                img.src = newImg.src;
+                img.style.display = 'block';
+                if (loadingPlaceholder) {
+                    loadingPlaceholder.remove();
+                }
+                callback();
+            };
+            
+            newImg.onerror = () => {
+                // 圖片載入失敗時顯示預設圖
+                if (loadingPlaceholder) {
+                    loadingPlaceholder.style.cssText = 'font-size: 120px; margin: 40px 0; color: #667eea;';
+                    loadingPlaceholder.innerHTML = '🎴';
+                }
+                img.style.display = 'none';
+                callback();
+            };
+            
+            // 設定載入超時（3秒後顯示預設圖）
+            setTimeout(() => {
+                if (img.src !== newImg.src) {
+                    newImg.onerror();
+                }
+            }, 3000);
+            
+            newImg.src = IMAGE_BASE_URL + card.image;
+        }
+        
+        // 顯示卡片（優化版）
         function showCard() {
             const cardNum = parseInt(document.getElementById('cardNumber').value);
             
@@ -955,17 +1058,17 @@
                 return;
             }
             
-            // 顯示載入動畫
+            // 立即顯示載入狀態，減少等待感
             document.getElementById('searchSection').style.display = 'none';
             document.getElementById('loadingSection').style.display = 'block';
             
-            // 模擬載入時間
-            setTimeout(() => {
+            // 使用 requestAnimationFrame 確保動畫順暢
+            requestAnimationFrame(() => {
                 displayCardResult(cardNum);
-            }, 500);
+            });
         }
         
-        // 顯示結果
+        // 顯示結果（優化版）
         function displayCardResult(cardNum) {
             const card = cardDatabase[cardNum];
             
@@ -976,23 +1079,8 @@
                 return;
             }
             
-            // 設定卡片編號
+            // 先設定文字內容（不需等待圖片）
             document.getElementById('displayCardNumber').textContent = `#${cardNum}`;
-            
-            // 設定圖片
-            const img = document.getElementById('cardImage');
-            img.src = IMAGE_BASE_URL + card.image;
-            img.onerror = () => {
-                // 圖片載入失敗時顯示預設圖
-                img.style.display = 'none';
-                const imageSection = img.parentElement;
-                const fallbackDiv = document.createElement('div');
-                fallbackDiv.style.cssText = 'font-size: 120px; margin: 40px 0; color: #667eea;';
-                fallbackDiv.textContent = '🎴';
-                imageSection.appendChild(fallbackDiv);
-            };
-            
-            // 設定文字內容
             document.getElementById('cardTitle').textContent = card.title;
             document.getElementById('reminderText').textContent = card.reminder;
             document.getElementById('meaningText').textContent = card.meaning;
@@ -1006,36 +1094,50 @@
                 document.getElementById('keywordsSection').innerHTML = keywordsHTML;
             }
             
-            // 切換顯示
+            // 先顯示結果區域，再載入圖片
             document.getElementById('loadingSection').style.display = 'none';
             document.getElementById('resultSection').style.display = 'block';
-            
-            // 捲動到頂部
             window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // 非同步載入圖片
+            loadCardImage(cardNum, () => {
+                // 圖片載入完成後的回調（如果需要的話）
+            });
         }
         
-        // 新查詢
+        // 新查詢（優化版）
         function newSearch() {
             document.getElementById('cardNumber').value = '';
             document.getElementById('resultSection').style.display = 'none';
             document.getElementById('searchSection').style.display = 'block';
             document.getElementById('cardNumber').focus();
             
-            // 重置圖片區域
+            // 清理圖片區域
             const img = document.getElementById('cardImage');
             img.style.display = 'block';
+            img.src = '';
             const imageSection = img.parentElement;
-            const fallbackDiv = imageSection.querySelector('div');
-            if (fallbackDiv) {
-                fallbackDiv.remove();
+            const placeholder = imageSection.querySelector('.image-loading');
+            if (placeholder) {
+                placeholder.remove();
             }
         }
         
-        // Enter 鍵送出
-        document.getElementById('cardNumber').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                showCard();
-            }
+        // 初始化（優化版）
+        window.addEventListener('DOMContentLoaded', () => {
+            initQuickSelect();
+            preloadPopularImages(); // 預載入熱門卡片
+            checkURLParams();
+            
+            // Enter 鍵送出
+            document.getElementById('cardNumber').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    showCard();
+                }
+            });
+            
+            // 自動聚焦輸入框
+            document.getElementById('cardNumber').focus();
         });
         
         // URL 參數支援
@@ -1047,15 +1149,6 @@
                 showCard();
             }
         }
-        
-        // 初始化
-        window.addEventListener('DOMContentLoaded', () => {
-            initQuickSelect();
-            checkURLParams();
-            
-            // 自動聚焦輸入框
-            document.getElementById('cardNumber').focus();
-        });
     </script>
 </body>
 </html>
