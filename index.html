@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>明想解答之卡 - 線上查詢</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎴</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎴</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📘</text></svg>">
     <meta name="description" content="明想解答之卡線上查詢系統，查看60張心靈指引卡片的完整解讀">
     <meta property="og:title" content="明想解答之卡">
     <meta property="og:description" content="輸入卡片編號，查看完整的心靈指引">
@@ -1005,8 +1005,13 @@
             const img = document.getElementById('cardImage');
             const imageContainer = img.parentElement;
             
-            // 顯示載入中的佔位符
+            // 清理之前的內容
             img.style.display = 'none';
+            img.style.position = 'static';
+            img.style.left = 'auto';
+            img.style.transform = 'none';
+            img.style.margin = '0 auto';
+            
             let loadingPlaceholder = imageContainer.querySelector('.image-loading');
             
             if (!loadingPlaceholder) {
@@ -1021,8 +1026,10 @@
                     flex-direction: column;
                     align-items: center;
                     justify-content: center;
+                    width: 100%;
+                    text-align: center;
                 `;
-                loadingPlaceholder.innerHTML = '🎴<br><small style="font-size: 14px; margin-top: 8px;">載入中...</small>';
+                loadingPlaceholder.innerHTML = '📘<br><small style="font-size: 14px; margin-top: 8px;">載入中...</small>';
                 imageContainer.appendChild(loadingPlaceholder);
             }
             
@@ -1031,6 +1038,10 @@
             newImg.onload = () => {
                 img.src = newImg.src;
                 img.style.display = 'block';
+                img.style.position = 'static';
+                img.style.left = 'auto';
+                img.style.transform = 'none';
+                img.style.margin = '0 auto';
                 if (loadingPlaceholder) {
                     loadingPlaceholder.remove();
                 }
@@ -1046,8 +1057,10 @@
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        width: 100%;
+                        text-align: center;
                     `;
-                    loadingPlaceholder.innerHTML = '🎴';
+                    loadingPlaceholder.innerHTML = '📘';
                 }
                 img.style.display = 'none';
                 callback();
