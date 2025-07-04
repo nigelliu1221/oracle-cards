@@ -176,6 +176,217 @@
             border-color: #007aff;
         }
         
+        /* 使用說明按鈕樣式 */
+        .help-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #f2f2f7;
+        }
+        
+        .help-btn {
+            width: 100%;
+            padding: 12px 16px;
+            background: #f2f2f7;
+            color: #86868b;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .help-btn:hover {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
+        
+        /* 使用說明彈出視窗樣式 */
+        .help-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        .help-modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 18px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.15);
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+        
+        .help-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+        
+        .help-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: #1d1d1f;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .close-btn {
+            background: #f2f2f7;
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 18px;
+            color: #86868b;
+        }
+        
+        .close-btn:hover {
+            background: #e5e5ea;
+            color: #1d1d1f;
+        }
+        
+        .help-content {
+            line-height: 1.6;
+            color: #1d1d1f;
+        }
+        
+        .help-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #007aff;
+            margin: 32px 0 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f2f2f7;
+        }
+        
+        .help-content h3:first-child {
+            margin-top: 0;
+        }
+        
+        .help-content p {
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+        
+        .help-content ul {
+            margin: 12px 0 20px 20px;
+        }
+        
+        .help-content li {
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .step-section {
+            background: #fbfbfd;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 16px 0 24px 0;
+            border-left: 3px solid #007aff;
+        }
+        
+        .step-title {
+            font-weight: 600;
+            color: #007aff;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .map-item {
+            background: white;
+            padding: 16px;
+            border-radius: 10px;
+            margin: 12px 0;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        
+        .map-item-title {
+            font-weight: 600;
+            color: #1d1d1f;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .mode-section {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 10px;
+            margin: 12px 0;
+            border-left: 3px solid #ff9500;
+        }
+        
+        .mode-title {
+            font-weight: 600;
+            color: #ff9500;
+            margin-bottom: 8px;
+            font-size: 15px;
+        }
+        
+        .timing-section {
+            background: #f0f8ff;
+            padding: 16px;
+            border-radius: 10px;
+            margin: 12px 0;
+        }
+        
+        .help-tip {
+            background: #f0f8ff;
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin: 16px 0;
+            border-left: 3px solid #007aff;
+        }
+        
+        .help-tip p {
+            margin: 0;
+            font-style: italic;
+            color: #1d1d1f;
+        }
+        
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, #e5e5ea, transparent);
+            margin: 32px 0;
+        }
+        
         .result-container {
             display: none;
             animation: fadeIn 0.4s ease-out;
@@ -349,6 +560,15 @@
                 max-width: 240px;
                 max-height: 240px;
             }
+            
+            .help-modal-content {
+                padding: 24px;
+                width: 95%;
+            }
+            
+            .help-title {
+                font-size: 20px;
+            }
         }
         
         .loading {
@@ -415,6 +635,14 @@
                 <div class="number-grid" id="numberGrid"></div>
             </div>
             
+            <!-- 新增使用說明按鈕 -->
+            <div class="help-section">
+                <button class="help-btn" onclick="showHelp()">
+                    <span>❓</span>
+                    如何使用明想解答之卡
+                </button>
+            </div>
+            
             <div class="logo" style="margin-top: 32px; margin-bottom: 0;">
                 <img src="https://raw.githubusercontent.com/nigelliu1221/oracle-cards/main/images/logo-4.png" 
                      alt="明想解答之卡 Logo" 
@@ -470,6 +698,175 @@
                 
                 <div class="action-buttons">
                     <button class="new-search-btn" onclick="newSearch()">查詢其他卡片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 使用說明彈出視窗 -->
+    <div class="help-modal" id="helpModal" onclick="hideHelp(event)">
+        <div class="help-modal-content" onclick="event.stopPropagation()">
+            <div class="help-header">
+                <h2 class="help-title">
+                    <span>📘</span>
+                    《明想正念之卡》使用教學
+                </h2>
+                <button class="close-btn" onclick="hideHelp()">×</button>
+            </div>
+            
+            <div class="help-content">
+                <div style="text-align: center; margin-bottom: 24px; font-style: italic; color: #666;">
+                    從混亂中找回清晰，從抽卡開始
+                </div>
+                
+                <h3><span>📘</span>導引語：不是占卜，而是自我對話的開始</h3>
+                <p>你手上的，不只是一套牌卡，而是一套思考與覺察的練習工具。當你學會好好提問，也會慢慢學會好好回答自己。</p>
+                
+                <h3><span>💡</span>實際使用案例</h3>
+                <p><strong>案例：工作壓力大，不知道該不該換工作？</strong></p>
+                <ul>
+                    <li><strong>步驟1：</strong>深呼吸三次，讓心情平靜下來</li>
+                    <li><strong>步驟2：</strong>默想問題：「我對現在的工作真正的感受是什麼？」</li>
+                    <li><strong>步驟3：</strong>選擇直覺盲抽，抽出一張牌</li>
+                    <li><strong>步驟4：</strong>假設抽到「重新審視內心聲音」的牌卡</li>
+                </ul>
+                <p><strong>解讀過程：</strong></p>
+                <ul>
+                    <li>看見牌卡圖案，感受它傳達的訊息</li>
+                    <li>翻閱手冊，發現更深層的引導</li>
+                    <li>進行對應的正念練習：書寫反思</li>
+                </ul>
+                <div class="help-tip">
+                    <p><strong>收穫：</strong>透過這個過程，你可能會發現工作本身沒問題，而是需要調整與同事的溝通方式，或者確實該考慮新的發展方向。重點是，答案來自你自己的覺察。</p>
+                </div>
+                
+                <h3><span>🌬️</span>使用步驟</h3>
+                <p><strong>STEP 1｜深呼吸，靜下心來</strong></p>
+                <p>輕輕吸氣，吐氣三次，讓心慢慢穩定下來。這是你與自己說話的時刻。</p>
+                
+                <p><strong>💭 STEP 2｜默想一個問題</strong></p>
+                <p>舉例來說，你可以問：</p>
+                <ul>
+                    <li>我為什麼最近總是感到焦慮？</li>
+                    <li>我對這份關係真正的感受是什麼？</li>
+                    <li>我該怎麼做，才比較靠近我想要的生活？</li>
+                </ul>
+                
+                <p><strong>🎴 STEP 3｜選擇抽卡方式</strong></p>
+                <ul>
+                    <li><strong>直覺盲抽：</strong>閉上眼，隨手抽出一張牌</li>
+                    <li><strong>圖案感應：</strong>看著牌背，挑出最吸引你的一張</li>
+                    <li><strong>🎲 60面骰子抽卡：</strong>擲出 1～60 的數字，找出對應編號的牌卡</li>
+                </ul>
+                <div class="help-tip">
+                    <p><em>有時候，不是你在選牌，而是你讓潛意識選了那張牌。</em></p>
+                </div>
+                
+                <p><strong>🔍 STEP 4｜解讀訊息</strong></p>
+                <ul>
+                    <li>閱讀卡片上的短語與插圖</li>
+                    <li>感受它和你的問題之間，有沒有什麼呼應</li>
+                    <li>翻開手冊，看見更多深入的心理結構與行動建議</li>
+                </ul>
+                
+                <p><strong>🧘 STEP 5｜搭配正念練習</strong></p>
+                <p>每張牌都附一則正念練習，幫你將覺察轉化為改變的第一步：</p>
+                <ul>
+                    <li>呼吸觀察、書寫反思、身體掃描</li>
+                    <li>桌前伸展、感官覺察、慈心練習</li>
+                </ul>
+                
+                <h3><span>🧭</span>四向解答地圖</h3>
+                <p><strong>不知道怎麼問？先看你屬於哪類問題：</strong></p>
+                <p>抽三張牌，可以幫你把單一問題轉化成更完整的脈絡。可以依序抽出（過去－現在－未來）這樣的時間線索，讓你看見問題的全貌。</p>
+                
+                <div style="margin: 16px 0;">
+                    <p><strong>⏳ 時間軸解讀</strong>（過去－現在－未來）</p>
+                    <ul>
+                        <li><strong>適合：</strong>想釐清一段經歷的影響</li>
+                        <li><strong>常見情境：</strong>職場卡關、人際事件回想、對未來感到迷惘</li>
+                    </ul>
+                </div>
+                
+                <div style="margin: 16px 0;">
+                    <p><strong>💭 內在轉化流程</strong>（感受－想法－行動）</p>
+                    <ul>
+                        <li><strong>適合：</strong>想理清卡住的情緒與行為</li>
+                        <li><strong>常見情境：</strong>情感混亂、無力感、拖延不前</li>
+                    </ul>
+                </div>
+                
+                <div style="margin: 16px 0;">
+                    <p><strong>🧩 困境拆解分析</strong>（問題－原因－解答）</p>
+                    <ul>
+                        <li><strong>適合：</strong>想看清問題的本質與盲點</li>
+                        <li><strong>常見情境：</strong>長期壓力、反覆出錯、找不到關鍵原因</li>
+                    </ul>
+                </div>
+                
+                <div style="margin: 16px 0;">
+                    <p><strong>🧭 決策支援導向</strong>（選擇－阻礙－方向）</p>
+                    <ul>
+                        <li><strong>適合：</strong>猶豫不決，想獲得指引</li>
+                        <li><strong>常見情境：</strong>要不要離職／換跑道、走或留、嘗試或放下</li>
+                    </ul>
+                </div>
+                
+                <h3><span>👯</span>一起玩也可以</h3>
+                <p><strong>單人・雙人・多人模式玩法</strong></p>
+                
+                <p><strong>🧍 單人模式（靜心練習）</strong></p>
+                <ul>
+                    <li>每日抽一張卡，建立自我覺察的習慣</li>
+                    <li>結合日記書寫與正念練習，轉化內在能量</li>
+                </ul>
+                
+                <p><strong>📱 遠距模式（隔空陪伴）</strong></p>
+                <ul>
+                    <li>讓朋友說出問題，你幫忙抽牌</li>
+                    <li>透過訊息或電話分享牌卡內容與感受</li>
+                    <li>適合關心遠方朋友，給予溫暖支持</li>
+                </ul>
+                
+                <p><strong>👥 雙人模式（關係對話）</strong></p>
+                <ul>
+                    <li>各自抽卡，分享彼此的問題與解讀</li>
+                    <li>也可以為對方抽一張，互相交流感受</li>
+                    <li>適合伴侶、好友、諮詢關係使用</li>
+                </ul>
+                
+                <p><strong>🧑‍🤝‍🧑 多人模式（團體交流）</strong></p>
+                <ul>
+                    <li>每人抽一張卡，分享與主題的連結</li>
+                    <li>可指定「今日主題卡」，作為共同對話起點</li>
+                    <li>適合工作坊、聚會、小型讀書會使用</li>
+                </ul>
+                <div class="help-tip">
+                    <p>📌 多人模式建議不使用60面骰，以維持節奏與儀式感</p>
+                </div>
+                
+                <h3><span>🎲</span>60面骰子</h3>
+                <p><strong>為直覺創造出現的空間</strong></p>
+                <ul>
+                    <li>默想你的問題</li>
+                    <li>擲出骰子（1～60）</li>
+                    <li>找出對應編號的牌卡或手冊說明</li>
+                    <li>閱讀、感受、練習</li>
+                </ul>
+                <div class="help-tip">
+                    <p>📌 適合在「思緒太亂」、「想給命運一個出口」、「不知道怎麼選牌」的時候使用。</p>
+                </div>
+                
+                <h3><span>🌿</span>推薦使用時機</h3>
+                <ul>
+                    <li><strong>🌅 早晨：</strong>為今天設定方向</li>
+                    <li><strong>🔁 煩惱時：</strong>釐清混亂思緒</li>
+                    <li><strong>🌙 睡前：</strong>溫柔收整白天的自己</li>
+                    <li><strong>🌀 情緒起伏時：</strong>穩定當下，練習回到中心</li>
+                </ul>
+                
+                <div class="help-tip">
+                    <p><strong>💬 溫馨提醒：</strong>這套卡，不會告訴你該怎麼做，但會引導你發現，那些藏在內心深處的答案。</p>
                 </div>
             </div>
         </div>
@@ -974,6 +1371,28 @@
                 errorDiv.style.display = 'none';
             }, 3000);
         }
+        
+        // 顯示使用說明
+        function showHelp() {
+            document.getElementById('helpModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 防止背景滾動
+        }
+        
+        // 隱藏使用說明
+        function hideHelp(event) {
+            // 如果點擊的是背景或關閉按鈕，才關閉彈窗
+            if (!event || event.target === document.getElementById('helpModal') || event.target.classList.contains('close-btn')) {
+                document.getElementById('helpModal').style.display = 'none';
+                document.body.style.overflow = 'auto'; // 恢復背景滾動
+            }
+        }
+        
+        // ESC 鍵關閉說明彈窗
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('helpModal').style.display === 'block') {
+                hideHelp();
+            }
+        });
         
         // 初始化快速選擇按鈕
         function initQuickSelect() {
